@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Songs Homepage - Welcome to My Music Store</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to My Music Store</h1>
+</header>
+<main>
+    <h2>Choose a song:</h2>
+
+    <form method="GET" action="/artists" >
+        <div th:each="song: ${songs}">
+            <input type="radio"
+                   name="trackId"
+                   th:text="${song.getTitle()} + ', Genre: ' + ${song.getGenre()} + ', Release Year: ' + ${song.getReleaseYear()} + ', Album: ' + ${song.getAlbum().getName()}"
+                   th:value="${song.getTrackId()}"><br/>
+
+            <!-- Edit button -->
+<!--            <form th:action="@{'/songs/edit/{songId}' (songId=${song.getId()})}"-->
+<!--                  method="GET">-->
+<!--                <input type='submit' value='Edit Song'>-->
+<!--            </form>-->
+            <button sec:authorize="hasRole('ADMIN')" type="button"
+                    th:onclick="'location.href=\'/songs/edit-form/' + ${song.getId()} + '\''">
+                Edit
+            </button>
+
+            <!-- Delete button -->
+<!--            <form th:action="@{'/songs/delete/{songId}' (songId=${song.getId()})}"-->
+<!--                  method="GET">-->
+<!--                <input type='submit' value='Delete Song'>-->
+<!--            </form>-->
+            <button sec:authorize="hasRole('ADMIN')" type="button"
+                    th:onclick="'location.href=\'/songs/delete/' + ${song.getId()} + '\''">
+                Delete
+            </button>
+            <br>
+        </div>
+
+        <th:block th:if="${hasError}">
+            <div style="color: red" th:text="${error}" class="text-danger"></div>
+        </th:block>
+
+        <br>
+
+        <input type='submit' value='Submit'>
+    </form>
+
+    <form sec:authorize="hasRole('ADMIN')" action="/songs/add-form" method="GET">
+        <input type="submit" value="Add Song">
+    </form>
+</main>
+</body>
+</html>

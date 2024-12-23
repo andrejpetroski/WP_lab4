@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Song</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        main {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <form th:if="${boolAdd}" action="/songs/add" method="POST">
+        <input type="text" autofocus name="title" placeholder="Title...">
+        <input type="text" name="trackId" placeholder="Track Id...">
+        <input type="text" name="genre" placeholder="Genre...">
+        <input type="number" name="releaseYear" placeholder="Release Year...">
+        <select name="albumId" required>
+            <option value="" disabled selected>Select an album...</option>
+            <option th:each="album: ${albums}" th:value="${album.getId()}" th:text="${album.getName()}">Album</option>
+        </select>
+
+        <th:block th:if="${hasError}">
+            <div style="color: red" th:text="${error}" class="text-danger"></div>
+        </th:block>
+
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <form th:if="${boolEdit}" th:action="@{'/songs/edit/{songId}' (songId=${songId})}"
+          method="POST">
+        <input type="text" autofocus name="title" th:placeholder="${song.getTitle()}">
+        <input type="text" name="trackId" th:placeholder="${song.getTrackId()}">
+        <input type="text" name="genre" th:placeholder="${song.getGenre()}">
+        <input type="number" name="releaseYear" th:placeholder="${song.getReleaseYear()}">
+        <select name="albumId">
+            <option value="" selected th:text="${song.getAlbum().getName()}">Select an album...</option>
+            <option th:each="album: ${albums}" th:value="${album.getId()}" th:text="${album.getName()}">Album</option>
+        </select>
+
+        <input type="submit" value="Submit">
+    </form>
+
+
+</main>
+
+</body>
+</html>

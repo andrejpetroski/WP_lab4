@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Choose ALBUM</title>
+    <style type = "text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+        table {
+            width:100%;
+        }
+        table, td, th {
+            border: 1px solid black;
+            padding:3px 2px;
+        }
+        section {
+            float: left;
+            margin: 0 1.5%;
+            width: 63%;
+        }
+        aside {
+            float: right;
+            margin: 0 1.5%;
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Select the Album to list Songs </h1>
+</header>
+<section>
+    <h2>Select album:</h2>
+
+<!--    <form action="/chooseAlbum" method="POST">-->
+<!--        <input type="text" name="releaseYear">-->
+<!--&lt;!&ndash;        <input type="submit" value="Filter">&ndash;&gt;-->
+<!--    </form>-->
+
+    <form method="GET" action="/chooseAlbum/songsInAlbum">
+        <div th:each="album: ${albums}">
+            <input type="radio"
+                   name="albumId"
+                   th:text="${album.getName()} + ' ' + ${album.getReleaseYear()}"
+                   th:value="${album.getId()}"><br/>
+        </div>
+        <br/>
+        <input type="text" name="releaseYear">
+        <input type='submit' value='Choose album'>
+    </form>
+</section>
+</body>
+</html>
